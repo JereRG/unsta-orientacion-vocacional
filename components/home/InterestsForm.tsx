@@ -1,54 +1,74 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 
-const interests = [
-    "Ciencias", "Tecnología", "Arte", "Humanidades", "Negocios",
-    "Salud", "Educación", "Deportes", "Medio Ambiente", "Política"
+export const interests = [
+    "Ciencias de la Salud", "Ciencias Jurídicas", "Ciencias Económicas",
+    "Ciencias Sociales", "Ingeniería", "Arquitectura", "Artes y Diseño",
+    "Ciencias de la Educación", "Teología", "Filosofía"
 ] as const
 
-type Interest = typeof interests[number]
+export type Interest = typeof interests[number]
 
 interface InterestsFormProps {
     data: {
-        interests: Record<Interest, boolean>
+        interests: Interest[]
     };
-    onNext: (data: { interests: Record<Interest, boolean> }) => void;
+    onNext: (data: { interests: Interest[] }) => void;
+    onPrevious: () => void;
 }
 
 export function InterestsForm({ data, onNext }: InterestsFormProps) {
-    const [selectedInterests, setSelectedInterests] = useState<Record<Interest, boolean>>(data.interests || {})
+    const [selectedInterests, setSelectedInterests] = React.useState<Interest[]>(data.interests || [])
 
-    const handleChange = (interest: Interest) => {
-        setSelectedInterests(prev => ({
-            ...prev,
-            [interest]: !prev[interest]
-        }))
+    const toggleInterest = (interest: Interest) => {
+        setSelectedInterests(prev =>
+            prev.includes(interest)
+                ? prev.filter(i => i !== interest)
+                : [...prev, interest]
+        )
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSubmit = () => {
         onNext({ interests: selectedInterests })
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <h2 className="text-2xl font-bold mb-4">Selecciona tus intereses</h2>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-                {interests.map(interest => (
-                    <div key={interest} className="flex items-center space-x-2">
-                        <Checkbox
-                            id={interest}
-                            checked={selectedInterests[interest] || false}
-                            onCheckedChange={() => handleChange(interest)}
-                        />
-                        <label htmlFor={interest} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            {interest}
-                        </label>
-                    </div>
+        <div className="space-y-6">
+            <h2 className="text-2xl font-bold mb-4 text-[#003366]">Selecciona tus áreas de interés</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {interests.map((interest, index) => (
+                    <motion.button
+                        key={interest}
+                        className={`p-4 rounded-lg text-center transition-colors ${
+                            selectedInterests.includes(interest)
+                                ? 'bg-[#003366] text-white'
+                                : 'bg-white text-[#003366] border border-[#003366]'
+                        }`}
+                        onClick={() => toggleInterest(interest)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                    >
+                        {interest}
+                    </motion.button>
                 ))}
             </div>
-            <Button type="submit">Siguiente</Button>
-        </form>
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+            >
+                <Button 
+                    onClick={handleSubmit} 
+                    className="w-full bg-[#003366] hover:bg-[#002244] text-white"
+                    disabled={selectedInterests.length === 0}
+                >
+                    Siguiente
+                </Button>
+            </motion.div>
+        </div>
     )
 }

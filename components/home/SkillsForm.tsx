@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { Slider } from "@/components/ui/slider"
+import { Star } from 'lucide-react'
 
-const skills = [
+export const skills = [
   "Comunicación", "Liderazgo", "Trabajo en equipo", "Resolución de problemas",
   "Creatividad", "Organización", "Análisis", "Adaptabilidad"
 ] as const
 
-type Skill = typeof skills[number]
+export type Skill = typeof skills[number]
 
 interface SkillsFormProps {
   data: {
@@ -18,38 +19,56 @@ interface SkillsFormProps {
 }
 
 export function SkillsForm({ data, onNext, onPrevious }: SkillsFormProps) {
-  const [skillLevels, setSkillLevels] = useState<Record<Skill, number>>(data.skills || {})
+  const [skillLevels, setSkillLevels] = React.useState<Record<Skill, number>>(data.skills || {})
 
-  const handleChange = (skill: Skill, value: number[]) => {
+  const handleRating = (skill: Skill, rating: number) => {
     setSkillLevels(prev => ({
       ...prev,
-      [skill]: value[0]
+      [skill]: rating
     }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = () => {
     onNext({ skills: skillLevels })
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2 className="text-2xl font-bold mb-4">Evalúa tus habilidades</h2>
-      {skills.map(skill => (
-        <div key={skill} className="mb-4">
+    <div className="space-y-6">
+      <h2 className="text-2xl font-bold mb-4 text-[#003366]">Evalúa tus habilidades</h2>
+      {skills.map((skill, index) => (
+        <motion.div
+          key={skill}
+          className="mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.1 }}
+        >
           <label className="block text-sm font-medium mb-2">{skill}</label>
-          <Slider
-            defaultValue={[skillLevels[skill] || 0]}
-            max={10}
-            step={1}
-            onValueChange={(value) => handleChange(skill, value)}
-          />
-        </div>
+          <div className="flex space-x-2">
+            {[1, 2, 3, 4, 5].map((rating) => (
+              <Star
+                key={rating}
+                className={`cursor-pointer transition-colors ${
+                  rating <= (skillLevels[skill] || 0)
+                    ? 'text-yellow-400 fill-yellow-400'
+                    : 'text-gray-300'
+                }`}
+                onClick={() => handleRating(skill, rating)}
+              />
+            ))}
+          </div>
+        </motion.div>
       ))}
       <div className="flex justify-between">
-        <Button type="button" variant="outline" onClick={onPrevious}>Anterior</Button>
-        <Button type="submit">Siguiente</Button>
+        <Button onClick={onPrevious} variant="outline">Anterior</Button>
+        <Button 
+          onClick={handleSubmit} 
+          className="bg-[#003366] hover:bg-[#002244] text-white"
+          disabled={Object.keys(skillLevels).length < skills.length}
+        >
+          Siguiente
+        </Button>
       </div>
-    </form>
+    </div>
   )
 }

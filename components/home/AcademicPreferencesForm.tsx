@@ -1,59 +1,61 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label"
 
-interface AcademicPreference {
-  id: string;
-  label: string;
-}
-
-const academicPreferences: AcademicPreference[] = [
+export const academicPreferences = [
   { id: 'theoretical', label: 'Prefiero estudios teóricos y conceptuales' },
   { id: 'practical', label: 'Prefiero estudios prácticos y aplicados' },
   { id: 'research', label: 'Me interesa la investigación y el análisis' },
   { id: 'creative', label: 'Disfruto de actividades creativas y expresivas' },
-]
+] as const
+
+export type AcademicPreference = typeof academicPreferences[number]['id']
 
 interface AcademicPreferencesFormProps {
   data: {
-    academicPreferences: {
-      preference?: string;
-    };
+    academicPreferences: AcademicPreference
   };
-  onNext: (data: { academicPreferences: { preference: string } }) => void;
+  onNext: (data: { academicPreferences: AcademicPreference }) => void;
   onPrevious: () => void;
 }
 
 export function AcademicPreferencesForm({ data, onNext, onPrevious }: AcademicPreferencesFormProps) {
-  const [preferences, setPreferences] = useState<{ preference?: string }>(data.academicPreferences || {})
+  const [preference, setPreference] = React.useState<AcademicPreference>(data.academicPreferences || '')
 
-  const handleChange = (value: string) => {
-    setPreferences(prev => ({
-      ...prev,
-      preference: value
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onNext({ academicPreferences: preferences as { preference: string } })
+  const handleSubmit = () => {
+    if (preference) {
+      onNext({ academicPreferences: preference })
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2 className="text-2xl font-bold mb-4">Preferencias Académicas</h2>
-      <RadioGroup onValueChange={handleChange} value={preferences.preference}>
-        {academicPreferences.map(pref => (
-          <div key={pref.id} className="flex items-center space-x-2 mb-2">
+    <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+      <h2 className="text-2xl font-bold mb-4 text-[#003366]">Preferencias Académicas</h2>
+      <RadioGroup value={preference} onValueChange={(value: AcademicPreference) => setPreference(value)}>
+        {academicPreferences.map((pref, index) => (
+          <motion.div
+            key={pref.id}
+            className="flex items-center space-x-2 mb-2"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+          >
             <RadioGroupItem value={pref.id} id={pref.id} />
             <Label htmlFor={pref.id}>{pref.label}</Label>
-          </div>
+          </motion.div>
         ))}
       </RadioGroup>
       <div className="flex justify-between mt-6">
         <Button type="button" variant="outline" onClick={onPrevious}>Anterior</Button>
-        <Button type="submit">Siguiente</Button>
+        <Button 
+          type="submit" 
+          className="bg-[#003366] hover:bg-[#002244] text-white"
+          disabled={!preference}
+        >
+          Siguiente
+        </Button>
       </div>
     </form>
   )
