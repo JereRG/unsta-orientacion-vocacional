@@ -10,6 +10,7 @@ import { AcademicPreferencesForm, AcademicPreference } from '@/components/home/A
 import { CareerGoalsForm, CareerGoal } from '@/components/home/CareerGoalsForm'
 import { Results } from '@/components/home/Results'
 import { Header } from '@/components/home/Header'
+import { Footer } from '@/components/home/Footer'
 
 interface FormData {
   interests: Interest[];
@@ -94,6 +95,7 @@ export default function VocationalGuidanceApp() {
           </Card>
         </motion.div>
       </main>
+      <Footer />
     </div>
   )
 }
