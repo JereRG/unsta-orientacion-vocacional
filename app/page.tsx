@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -9,10 +9,9 @@ import InterestsForm from '@/components/home/InterestsForm'
 import SkillsForm, { Skill } from '@/components/home/SkillsForm'
 import AcademicPreferencesForm, { AcademicPreference } from '@/components/home/AcademicPreferencesForm'
 import CareerGoalsForm, { CareerGoal } from '@/components/home/CareerGoalsForm'
-import  Result  from '@/components/home/Results'
+import Result from '@/components/home/Results'
 import { Header } from '@/components/home/Header'
 import { Footer } from '@/components/home/Footer'
-
 
 interface FormData {
   interests: Interest[];
@@ -25,6 +24,7 @@ interface StepComponentProps {
   data: FormData;
   onNext: (data: Partial<FormData>) => void;
   onPrevious: () => void;
+  onRestart: () => void;
 }
 
 type StepComponent = React.ComponentType<StepComponentProps>;
@@ -35,13 +35,15 @@ interface Step {
 }
 
 export default function VocationalGuidanceApp() {
-  const [step, setStep] = useState(0)
-  const [formData, setFormData] = useState<FormData>({
+  const initialFormData: FormData = {
     interests: [],
     skills: {} as Record<Skill, number>,
     academicPreferences: '' as AcademicPreference,
-    careerGoals: '' as CareerGoal
-  })
+    careerGoals: '' as CareerGoal,
+  };
+
+  const [step, setStep] = useState(0)
+  const [formData, setFormData] = useState<FormData>(initialFormData)
 
   const steps: Step[] = [
     { title: 'Intereses', component: InterestsForm as StepComponent },
@@ -58,6 +60,11 @@ export default function VocationalGuidanceApp() {
 
   const handlePrevious = () => {
     setStep(prevStep => prevStep - 1)
+  }
+
+  const handleRestart = () => {
+    setFormData(initialFormData)
+    setStep(0)
   }
 
   const CurrentStepComponent = steps[step].component
@@ -90,6 +97,7 @@ export default function VocationalGuidanceApp() {
                     data={formData}
                     onNext={handleNext}
                     onPrevious={handlePrevious}
+                    onRestart={handleRestart}
                   />
                 </motion.div>
               </AnimatePresence>

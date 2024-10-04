@@ -20,10 +20,10 @@ export function Header() {
             <div className="container mx-auto flex items-center justify-between">
                 <Link href="/" className="flex items-center space-x-2">
                     <Image
-                        src="/unstalogopng.png"
+                        src="/elegicreerunsta.jpg"
                         alt="Logo UNSTA"
-                        width={120}
-                        height={120}
+                        width={300}
+                        height={300}
                         className="rounded-lg"
                     />
                 </Link>
