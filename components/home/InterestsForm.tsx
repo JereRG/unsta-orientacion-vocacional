@@ -11,15 +11,15 @@ export const interests = [
 export type Interest = typeof interests[number]
 
 interface InterestsFormProps {
-    data: {
+    data?: {
         interests: Interest[]
     };
     onNext: (data: { interests: Interest[] }) => void;
     onPrevious: () => void;
 }
 
-export function InterestsForm({ data, onNext }: InterestsFormProps) {
-    const [selectedInterests, setSelectedInterests] = React.useState<Interest[]>(data.interests || [])
+export default function InterestsForm({ data, onNext, onPrevious }: InterestsFormProps) {
+    const [selectedInterests, setSelectedInterests] = React.useState<Interest[]>(data?.interests || [])
 
     const toggleInterest = (interest: Interest) => {
         setSelectedInterests(prev =>
@@ -34,16 +34,16 @@ export function InterestsForm({ data, onNext }: InterestsFormProps) {
     }
 
     return (
-        <div className="space-y-6">
-            <h2 className="text-2xl font-bold mb-4 text-[#003366]">Selecciona tus áreas de interés</h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="space-y-6 p-4 bg-white min-h-screen">
+            <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">Selecciona tus áreas de interés</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {interests.map((interest, index) => (
                     <motion.button
                         key={interest}
-                        className={`p-4 rounded-lg text-center transition-colors ${
+                        className={`aspect-square p-4 rounded-xl text-center transition-colors shadow-lg flex items-center justify-center ${
                             selectedInterests.includes(interest)
-                                ? 'bg-[#003366] text-white'
-                                : 'bg-white text-[#003366] border border-[#003366]'
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-white text-blue-600 border-2 border-blue-600'
                         }`}
                         onClick={() => toggleInterest(interest)}
                         whileHover={{ scale: 1.05 }}
@@ -52,23 +52,25 @@ export function InterestsForm({ data, onNext }: InterestsFormProps) {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                     >
-                        {interest}
+                        <span className="text-lg font-bold">{interest}</span>
                     </motion.button>
                 ))}
             </div>
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-            >
+            <div className="flex justify-between mt-6">
+                <Button 
+                    onClick={onPrevious}
+                    className="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-100"
+                >
+                    Anterior
+                </Button>
                 <Button 
                     onClick={handleSubmit} 
-                    className="w-full bg-[#003366] hover:bg-[#002244] text-white"
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
                     disabled={selectedInterests.length === 0}
                 >
                     Siguiente
                 </Button>
-            </motion.div>
+            </div>
         </div>
     )
 }

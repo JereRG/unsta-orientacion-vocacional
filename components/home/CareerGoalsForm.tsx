@@ -11,15 +11,15 @@ export const careerGoals = [
 export type CareerGoal = typeof careerGoals[number]
 
 interface CareerGoalsFormProps {
-  data: {
+  data?: {
     careerGoals: CareerGoal
   };
   onNext: (data: { careerGoals: CareerGoal }) => void;
   onPrevious: () => void;
 }
 
-export function CareerGoalsForm({ data, onNext, onPrevious }: CareerGoalsFormProps) {
-  const [selectedGoal, setSelectedGoal] = React.useState<CareerGoal | null>(data.careerGoals || null)
+export default function CareerGoalsForm({ data, onNext, onPrevious }: CareerGoalsFormProps) {
+  const [selectedGoal, setSelectedGoal] = React.useState<CareerGoal | null>(data?.careerGoals || null)
 
   const handleSubmit = () => {
     if (selectedGoal) {
@@ -28,16 +28,16 @@ export function CareerGoalsForm({ data, onNext, onPrevious }: CareerGoalsFormPro
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold mb-4 text-[#003366]">Selecciona tu objetivo profesional principal</h2>
-      <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-6 p-4 bg-white min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">Selecciona tu objetivo profesional principal</h2>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {careerGoals.map((goal, index) => (
           <motion.button
             key={goal}
-            className={`p-4 rounded-lg text-center transition-colors ${
+            className={`aspect-square p-4 rounded-xl text-center transition-colors shadow-lg flex items-center justify-center ${
               selectedGoal === goal
-                ? 'bg-[#003366] text-white'
-                : 'bg-white text-[#003366] border border-[#003366]'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-blue-600 border-2 border-blue-600'
             }`}
             onClick={() => setSelectedGoal(goal)}
             whileHover={{ scale: 1.05 }}
@@ -46,15 +46,20 @@ export function CareerGoalsForm({ data, onNext, onPrevious }: CareerGoalsFormPro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            {goal}
+            <span className="text-lg font-bold">{goal}</span>
           </motion.button>
         ))}
       </div>
-      <div className="flex justify-between">
-        <Button onClick={onPrevious} variant="outline">Anterior</Button>
+      <div className="flex justify-between mt-6">
+        <Button 
+          onClick={onPrevious}
+          className="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-100"
+        >
+          Anterior
+        </Button>
         <Button 
           onClick={handleSubmit} 
-          className="bg-[#003366] hover:bg-[#002244] text-white"
+          className="bg-blue-600 hover:bg-blue-700 text-white"
           disabled={!selectedGoal}
         >
           Ver Resultados

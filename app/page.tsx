@@ -4,13 +4,15 @@ import React, { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Stepper } from '@/components/home/Stepper'
-import { InterestsForm, Interest } from '@/components/home/InterestsForm'
-import { SkillsForm, Skill } from '@/components/home/SkillsForm'
-import { AcademicPreferencesForm, AcademicPreference } from '@/components/home/AcademicPreferencesForm'
-import { CareerGoalsForm, CareerGoal } from '@/components/home/CareerGoalsForm'
+import { Interest } from '@/components/home/InterestsForm'
+import InterestsForm from '@/components/home/InterestsForm'
+import SkillsForm, { Skill } from '@/components/home/SkillsForm'
+import AcademicPreferencesForm, { AcademicPreference } from '@/components/home/AcademicPreferencesForm'
+import CareerGoalsForm, { CareerGoal } from '@/components/home/CareerGoalsForm'
 import { Results } from '@/components/home/Results'
 import { Header } from '@/components/home/Header'
 import { Footer } from '@/components/home/Footer'
+
 
 interface FormData {
   interests: Interest[];
@@ -69,7 +71,7 @@ export default function VocationalGuidanceApp() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="w-full max-w-4xl mx-auto shadow-lg">
+          <Card className="w-full max-w-6xl mx-auto shadow-lg">
             <CardHeader className="bg-[#003366] text-white">
               <CardTitle className="text-2xl">Orientación Vocacional UNSTA</CardTitle>
               <CardDescription className="text-gray-200">Descubre tu camino profesional en nuestra universidad</CardDescription>

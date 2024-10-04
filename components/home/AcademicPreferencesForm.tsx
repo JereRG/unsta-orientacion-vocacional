@@ -1,8 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Button } from "@/components/ui/button"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Label } from "@/components/ui/label"
 
 export const academicPreferences = [
   { id: 'theoretical', label: 'Prefiero estudios teóricos y conceptuales' },
@@ -14,15 +12,15 @@ export const academicPreferences = [
 export type AcademicPreference = typeof academicPreferences[number]['id']
 
 interface AcademicPreferencesFormProps {
-  data: {
+  data?: {
     academicPreferences: AcademicPreference
   };
   onNext: (data: { academicPreferences: AcademicPreference }) => void;
   onPrevious: () => void;
 }
 
-export function AcademicPreferencesForm({ data, onNext, onPrevious }: AcademicPreferencesFormProps) {
-  const [preference, setPreference] = React.useState<AcademicPreference>(data.academicPreferences || '')
+export default function AcademicPreferencesForm({ data, onNext, onPrevious }: AcademicPreferencesFormProps) {
+  const [preference, setPreference] = React.useState<AcademicPreference>(data?.academicPreferences || '')
 
   const handleSubmit = () => {
     if (preference) {
@@ -31,32 +29,43 @@ export function AcademicPreferencesForm({ data, onNext, onPrevious }: AcademicPr
   }
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-      <h2 className="text-2xl font-bold mb-4 text-[#003366]">Preferencias Académicas</h2>
-      <RadioGroup value={preference} onValueChange={(value: AcademicPreference) => setPreference(value)}>
+    <div className="space-y-6  p-4 bg-white min-h-screen">
+      <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">Preferencias Académicas</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {academicPreferences.map((pref, index) => (
-          <motion.div
+          <motion.button
             key={pref.id}
-            className="flex items-center space-x-2 mb-2"
+            className={`aspect-square p-4 rounded-xl text-center transition-colors shadow-lg flex items-center justify-center ${
+              preference === pref.id
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-blue-600 border-2 border-blue-600'
+            }`}
+            onClick={() => setPreference(pref.id)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
           >
-            <RadioGroupItem value={pref.id} id={pref.id} />
-            <Label htmlFor={pref.id}>{pref.label}</Label>
-          </motion.div>
+            <span className="text-lg font-bold">{pref.label}</span>
+          </motion.button>
         ))}
-      </RadioGroup>
+      </div>
       <div className="flex justify-between mt-6">
-        <Button type="button" variant="outline" onClick={onPrevious}>Anterior</Button>
         <Button 
-          type="submit" 
-          className="bg-[#003366] hover:bg-[#002244] text-white"
+          onClick={onPrevious}
+          className="bg-white text-blue-600 border-2 border-blue-600 hover:bg-blue-100"
+        >
+          Anterior
+        </Button>
+        <Button 
+          onClick={handleSubmit} 
+          className="bg-blue-600 hover:bg-blue-700 text-white"
           disabled={!preference}
         >
           Siguiente
         </Button>
       </div>
-    </form>
+    </div>
   )
 }
