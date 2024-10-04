@@ -20,7 +20,7 @@ interface AcademicPreferencesFormProps {
 }
 
 export default function AcademicPreferencesForm({ data, onNext, onPrevious }: AcademicPreferencesFormProps) {
-  const [preference, setPreference] = React.useState<AcademicPreference>(data?.academicPreferences || '')
+  const [preference, setPreference] = React.useState<AcademicPreference | undefined>(data?.academicPreferences)
 
   const handleSubmit = () => {
     if (preference) {
@@ -29,7 +29,7 @@ export default function AcademicPreferencesForm({ data, onNext, onPrevious }: Ac
   }
 
   return (
-    <div className="space-y-6  p-4 bg-white min-h-screen">
+    <div className="space-y-6 p-4 bg-white min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-blue-700 text-center">Preferencias Académicas</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {academicPreferences.map((pref, index) => (

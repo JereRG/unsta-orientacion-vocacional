@@ -9,7 +9,7 @@ import InterestsForm from '@/components/home/InterestsForm'
 import SkillsForm, { Skill } from '@/components/home/SkillsForm'
 import AcademicPreferencesForm, { AcademicPreference } from '@/components/home/AcademicPreferencesForm'
 import CareerGoalsForm, { CareerGoal } from '@/components/home/CareerGoalsForm'
-import { Results } from '@/components/home/Results'
+import  Result  from '@/components/home/Results'
 import { Header } from '@/components/home/Header'
 import { Footer } from '@/components/home/Footer'
 
@@ -48,7 +48,7 @@ export default function VocationalGuidanceApp() {
     { title: 'Habilidades', component: SkillsForm as StepComponent },
     { title: 'Preferencias Académicas', component: AcademicPreferencesForm as StepComponent },
     { title: 'Objetivos Profesionales', component: CareerGoalsForm as StepComponent },
-    { title: 'Resultados', component: Results as StepComponent }
+    { title: 'Resultados', component: Result as StepComponent }
   ]
 
   const handleNext = (data: Partial<FormData>) => {

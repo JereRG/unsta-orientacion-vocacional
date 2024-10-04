@@ -33,7 +33,7 @@ export function Footer() {
                     </motion.div>
 
                     <div className="flex space-x-4">
-                        <a href="https://github.com/tricode" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                        <a href="https://github.com/tricode-it" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
                             <Github className="w-6 h-6 hover:text-[#FFD700] transition-colors duration-300" />
                         </a>
                         <a href="https://linkedin.com/company/tricode" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">

@@ -65,7 +65,7 @@ function getRecommendations(data: ResultsProps['data']): CareerRecommendation[] 
     return recommendations.slice(0, 3) // Devuelve las 3 mejores recomendaciones
 }
 
-export default function Component({ data }: ResultsProps) {
+export default function Result({ data }: ResultsProps) {
     const recommendations = getRecommendations(data)
 
     return (

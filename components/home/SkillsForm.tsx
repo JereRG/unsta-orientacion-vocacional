@@ -19,7 +19,9 @@ interface SkillsFormProps {
 }
 
 export default function SkillsForm({ data, onNext, onPrevious }: SkillsFormProps) {
-  const [skillLevels, setSkillLevels] = React.useState<Record<Skill, number>>(data?.skills || {})
+  const [skillLevels, setSkillLevels] = React.useState<Record<Skill, number>>(
+    data?.skills || skills.reduce((acc, skill) => ({ ...acc, [skill]: 0 }), {} as Record<Skill, number>)
+  )
 
   const handleRating = (skill: Skill, rating: number) => {
     setSkillLevels(prev => ({
@@ -71,7 +73,6 @@ export default function SkillsForm({ data, onNext, onPrevious }: SkillsFormProps
         <Button 
           onClick={handleSubmit} 
           className="bg-blue-600 hover:bg-blue-700 text-white"
-          disabled={Object.keys(skillLevels).length < skills.length}
         >
           Siguiente
         </Button>
